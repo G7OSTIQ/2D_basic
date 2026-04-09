@@ -29,7 +29,7 @@ public class player_controls : MonoBehaviour
     {
 
         Vector2 input = value.Get<Vector2>();
-        if (input.x != 0)
+        if (input.x != 0)// if the input is x it will do something else it does not
         {
             mespriterender.flipX = input.x < 0;//This will flip the character 
         }
