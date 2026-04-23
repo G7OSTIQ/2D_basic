@@ -13,9 +13,15 @@ public class player_controls : MonoBehaviour
 
     public Transform groundCheck;
 
+    [Header("References")]
+    public ParticleSystem sandParticle;
+
+    [Header("Sounds")]
+    public AudioClip[] jumpsound;
+
     private int jumpleft = 2;
 
-
+    private AudioSource myAudioSoruce;
     private Rigidbody2D myrigitbody2D;
     private SpriteRenderer mespriterender;
     private Animator myanimator;
@@ -27,6 +33,7 @@ public class player_controls : MonoBehaviour
         myrigitbody2D = GetComponent<Rigidbody2D>();
         mespriterender = GetComponent<SpriteRenderer>();
         myanimator = GetComponent<Animator>();
+        myAudioSoruce = GetComponent<AudioSource>();
     }
 
 
@@ -39,9 +46,26 @@ public class player_controls : MonoBehaviour
     
         myanimator.SetFloat("Velocity", velocityX);
         myanimator.SetFloat("Falling_Velocity", myrigitbody2D.linearVelocityY);
-        myanimator.SetBool("Jumping", isGrouned());
+        myanimator.SetBool("IsGrounded", isGrouned());
         myanimator.SetInteger("Jump_Left", jumpleft);
-       
+
+        // If grounded and particles are stopped
+        //Start particles
+        //If not grounded and particles playering
+        //Stop particles
+
+        if (isGrouned() && !sandParticle.isPlaying)
+        {
+            sandParticle.Play();
+        }
+
+        if (isGrouned() && sandParticle.isPlaying)
+        {
+            sandParticle.Stop();
+        }
+
+
+
     }
 
     private void OnMove(InputValue value)
@@ -69,6 +93,9 @@ public class player_controls : MonoBehaviour
         {
             myrigitbody2D.linearVelocityY = jump_force;
             jumpleft--;
+
+            int idx= Random.Range(0, jumpsound.Length);
+            myAudioSoruce.PlayOneShot(jumpsound[idx]);
         }
 
 
